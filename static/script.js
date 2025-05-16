@@ -11,7 +11,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // ─── Chat endpoint ─────────────────────────────────────────────
   // if your Flask app is running locally on port 5000
-  const ASK_URL = "http://127.0.0.1:5000/ask";
+  const ASK_URL = "/ask";
+
 
 
   // ─── State ────────────────────────────────────────────────────
