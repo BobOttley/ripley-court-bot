@@ -99,9 +99,13 @@ system_prompt = (
 app = Flask(__name__, static_folder="static")
 CORS(app, resources={r"/ask": {"origins": "*"}})
 
+from flask import redirect
+
 @app.route("/", methods=["GET"])
 def home():
-    return app.send_static_file("chat.html")
+    # Redirect root URL to the static chat page
+    return redirect("/static/chat.html")
+
 
 # ─── Helper functions ────────────────────────────────────────────────────────
 def cosine_similarities(matrix, vector):
