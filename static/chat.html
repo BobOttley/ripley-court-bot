@@ -6,8 +6,8 @@
   <title>Ripley Court Chatbot</title>
   <style>
     :root {
-      --primary-color: #091825; /* Header, send button */
-      --accent-color: rgba(46,139,87,0.95);  /* Toggle, prefix */
+      --primary-color: rgba(46,139,87,0.95); /* Brand green */
+      --accent-color: #FF9F1C;               /* Award Gold for hovers/prefix */
       --text-color: #fff;
       --chat-bg: #f9f9f9;
       --border-color: #e0e0e0;
@@ -28,7 +28,7 @@
       width: 60px;
       height: 60px;
       border-radius: 50%;
-      background: var(--accent-color);
+      background: var(--primary-color);
       color: var(--text-color);
       font-size: 28px;
       display: flex;
@@ -96,7 +96,7 @@
     }
     .penai-user {
       text-align: right;
-      color: rgba(46,139,87,0.95);
+      color: var(--primary-color);
     }
     .penai-bot {
       text-align: left;
@@ -121,6 +121,7 @@
       border-radius: 5px;
       font-size: 14px;
       outline: none;
+      color: #091825;
     }
     #penai-input:focus {
       border-color: var(--primary-color);
@@ -137,7 +138,7 @@
       transition: background .2s;
     }
     #penai-send-btn:hover {
-      background: rgba(46,139,87,0.95);
+      background: var(--accent-color);
     }
 
     /* Quick Replies */
@@ -156,7 +157,7 @@
       font-size: 12px;
     }
     .quick-reply:hover {
-      background: rgba(46,139,87,0.95);
+      background: var(--accent-color);
     }
   </style>
 </head>
