@@ -182,7 +182,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     try {
-      const res = await fetch(ASK_URL, {
+      const ASK_URL = "https://ripley-court-bot.onrender.com/ask";
         method:  "POST",
         headers: { "Content-Type": "application/json" },
         body:    JSON.stringify({ question }),
