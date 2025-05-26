@@ -1,19 +1,18 @@
+// /static/script.js
 console.log("🚀 script.js loaded");
 
 document.addEventListener("DOMContentLoaded", () => {
-   // ─── UI refs ─────────────────────────────────────────────────
-  const toggle     = document.getElementById("penai-toggle");
-  const chatbox    = document.getElementById("penai-chatbox");
-  const msgs       = document.getElementById("penai-messages");
-  const input      = document.getElementById("penai-input");
-  const sendBtn    = document.getElementById("penai-send-btn");
-  const header     = document.getElementById("penai-header");
+  // ─── UI refs ─────────────────────────────────────────────────
+  const toggle       = document.getElementById("penai-toggle");
+  const chatbox      = document.getElementById("penai-chatbox");
+  const msgs         = document.getElementById("penai-messages");
+  const input        = document.getElementById("penai-input");
+  const sendBtn      = document.getElementById("penai-send-btn");
+  const header       = document.getElementById("penai-header");
+  const minimizeBtn  = document.getElementById("penai-minimize-btn");
 
   // ─── Chat endpoint ─────────────────────────────────────────────
-  // if your Flask app is running locally on port 5000
-  const ASK_URL = "/ask";
-
-
+  const ASK_URL = "http://127.0.0.1:5000/ask";
 
   // ─── State ────────────────────────────────────────────────────
   let chatHistory       = [];
@@ -26,40 +25,40 @@ document.addEventListener("DOMContentLoaded", () => {
   // ─── Quick-replies grouped by category ────────────────────────
   const quickByCat = {
     admissions: [
-      { label: "Enquire now",               query: "enquire" },
-      { label: "Download prospectus",       query: "prospectus" },
-      { label: "Fees",                      query: "fees" },
-      { label: "Registration deadlines",    query: "registration deadlines" }
+      { label: "Enquire now",            query: "enquire" },
+      { label: "Download prospectus",    query: "prospectus" },
+      { label: "Fees",                   query: "fees" },
+      { label: "Registration deadlines", query: "registration deadlines" }
     ],
     lunch: [
-      { label: "Lunch menu",                query: "lunch" }
+      { label: "Lunch menu",             query: "lunch" }
     ],
     calendar: [
-      { label: "Term dates",                query: "term dates" },
-      { label: "Open events",               query: "open events" }
+      { label: "Term dates",             query: "term dates" },
+      { label: "Open events",            query: "open events" }
     ],
     uniform: [
-      { label: "Uniform info",              query: "uniform" }
+      { label: "Uniform info",           query: "uniform" }
     ],
     scholarships: [
-      { label: "Bursaries & scholarships",  query: "scholarships and bursaries" }
+      { label: "Bursaries & scholarships", query: "scholarships and bursaries" }
     ],
     contact: [
-      { label: "Contact us",                query: "contact" }
+      { label: "Contact us",             query: "contact" }
     ],
     academics: [
-      { label: "Academic life",             query: "academic life" },
-      { label: "Subjects offered",          query: "subjects" },
-      { label: "Sixth Form",                query: "sixth form" }
+      { label: "Academic life",          query: "academic life" },
+      { label: "Subjects offered",       query: "subjects" },
+      { label: "Sixth Form",             query: "sixth form" }
     ],
     extracurricular: [
-      { label: "Co-curricular",             query: "co-curricular" },
-      { label: "Sport",                     query: "sport" },
-      { label: "Faith Life",                query: "faith life" }
+      { label: "Co-curricular",          query: "co-curricular" },
+      { label: "Sport",                  query: "sport" },
+      { label: "Faith Life",             query: "faith life" }
     ],
     policies: [
-      { label: "Policies",                  query: "policies" },
-      { label: "Safeguarding",              query: "safeguarding" }
+      { label: "Policies",               query: "policies" },
+      { label: "Safeguarding",           query: "safeguarding" }
     ]
   };
 
@@ -101,8 +100,16 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  // ─── Fade out old messages ────────────────────────────────────
+  function fadeOldMessages() {
+    document
+      .querySelectorAll("#penai-messages .penai-message")
+      .forEach(el => el.classList.add("faded"));
+  }
+
   // ─── Render user message ──────────────────────────────────────
   function renderUser(text, save = true) {
+    fadeOldMessages();
     Object.values(quickByCat).flat().forEach(b => {
       if (b.query.toLowerCase() === text.toLowerCase()) {
         usedQueries.add(b.query);
@@ -118,6 +125,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // ─── Render bot message + quick-replies ───────────────────────
   function renderBot(html, isWelcome = false, category = "admissions", save = true) {
+    fadeOldMessages();
     const d = document.createElement("div");
     d.className = "penai-message penai-bot";
     d.innerHTML = `<strong><span class="penai-prefix">PEN.ai:</span></strong> ${html}`;
@@ -151,7 +159,8 @@ document.addEventListener("DOMContentLoaded", () => {
     removeThinking();
     thinkingDiv = document.createElement("div");
     thinkingDiv.className = "penai-message penai-bot";
-    thinkingDiv.innerHTML = `<strong><span class="penai-prefix">PEN.ai:</span></strong> <em>PEN.ai is thinking…</em>`;
+    thinkingDiv.innerHTML =
+      `<strong><span class="penai-prefix">PEN.ai:</span></strong> <em>PEN.ai is thinking…</em>`;
     msgs.appendChild(thinkingDiv);
     msgs.scrollTop = msgs.scrollHeight;
   }
@@ -211,7 +220,8 @@ document.addEventListener("DOMContentLoaded", () => {
         removeThinking();
       } else {
         removeThinking();
-        renderBot(`Sorry, I couldn't process your request. (${err.message})`, false, "admissions");
+        renderBot(`Sorry, I couldn't process your request. (${err.message})`,
+                  false, "admissions");
       }
     } finally {
       currentController = null;
@@ -233,6 +243,12 @@ document.addEventListener("DOMContentLoaded", () => {
         loadHistory();
       }
     }
+  });
+
+  // ─── Minimize button ─────────────────────────────────────────
+  minimizeBtn.addEventListener("click", () => {
+    if (currentController) currentController.abort();
+    chatbox.style.display = "none";
   });
 
   // ─── Input & send handlers ───────────────────────────────────
@@ -288,9 +304,11 @@ document.addEventListener("DOMContentLoaded", () => {
       renderBot(`<em>${prompt}</em>${linkHtml}`, false, detectCategory(prompt));
     }, 200);
   }
-
   document.addEventListener("mouseout", e => {
-    if (!exitIntentShown && chatbox.style.display === "none" && e.clientY <= 0 && !e.relatedTarget) {
+    if (!exitIntentShown
+        && chatbox.style.display === "none"
+        && e.clientY <= 0
+        && !e.relatedTarget) {
       showExitNudge();
     }
   });
