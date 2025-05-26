@@ -239,29 +239,29 @@ STATIC_QAS = {
     # ─── Open Events & Visits ──────────────────────────────────────────────
     "open events": (
         "Join us for Open Mornings or book a private visit to experience Ripley Court firsthand.",
-        PAGE_LINKS["open mornings and visits"],                  # ← fixed
+        PAGE_LINKS["open mornings and visits"],                  
         URL_LABELS[PAGE_LINKS["open mornings and visits"]]
     ),
     "open mornings": (
         "Join us for Open Mornings or book a private visit to experience Ripley Court firsthand.",
-        PAGE_LINKS["open mornings and visits"],                  # ← fixed
+        PAGE_LINKS["open mornings and visits"],                  
         URL_LABELS[PAGE_LINKS["open mornings and visits"]]
     ),
     "visit us": (
         "Arrange a personal tour to experience Ripley Court’s welcoming community and outstanding pastoral care.",
-        PAGE_LINKS["visit us"],                                  # ← fixed
+        PAGE_LINKS["visit us"],                                  
         URL_LABELS[PAGE_LINKS["visit us"]]
     ),
 
     # ─── Scholarships & Bursaries ──────────────────────────────────────────
     "scholarships": (
         "We offer a range of subject scholarships (Academic, Sport, Music, Art) and means-tested bursaries. See details here.",
-        PAGE_LINKS["scholarships and bursaries"],               # ← fixed
+        PAGE_LINKS["scholarships and bursaries"],               
         URL_LABELS[PAGE_LINKS["scholarships and bursaries"]]
     ),
     "bursaries": (
         "We offer a range of subject scholarships (Academic, Sport, Music, Art) and means-tested bursaries. See details here.",
-        PAGE_LINKS["scholarships and bursaries"],               # ← fixed
+        PAGE_LINKS["scholarships and bursaries"],               
         URL_LABELS[PAGE_LINKS["scholarships and bursaries"]]
     ),
 
@@ -405,7 +405,17 @@ STATIC_QAS = {
         PAGE_LINKS["girl year 3-6"],
         URL_LABELS[PAGE_LINKS["girl year 3-6"]]
     ),
-
+    "sixth form": (
+        ""We educate pupils from Nursery through Year 6, preparing them academically and pastorally "
+        "for the transition to senior schools.",
+        PAGE_LINKS["results and destinations"],
+        URL_LABELS[PAGE_LINKS["results and destinations"]]
+    ),
+    "what subjects do you offer"] = (
+    "We offer a broad curriculum across Art, Computing, Drama, English, Food Technology, French, Geography, History, Learning Support, Mathematics, Music, Philosophy, PSHEE, Religious Studies, Science, Sport & PE,Verbal & Non-Verbal Reasoning and more.",
+    PAGE_LINKS["curriculum"],
+    URL_LABELS[PAGE_LINKS["curriculum"]]
+)
 }
 
 # ─── Load embeddings & metadata ───────────────────────────────────────────────
@@ -520,12 +530,13 @@ def ask():
                 url=None
             ), 200
 
-        # 5) Keyword → URL
+        # 5) Keyword → URL (only match full keys longer than 6 chars)
         relevant_url = None
-        for k,u in PAGE_LINKS.items():
-            if k in key or any(fuzz.partial_ratio(k,w)>80 for w in key.split() if len(w)>3):
-                relevant_url = u
-                break
+        for k, u in PAGE_LINKS.items():
+           if len(k) > 6 and k in key:
+               relevant_url = u
+               break
+
 
         # 6) RAG fallback
         emb = openai.embeddings.create(model=EMB_MODEL, input=question)
