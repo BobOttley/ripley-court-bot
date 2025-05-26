@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: chatbot-web
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: python app.py
+
+  - type: cron
+    name: update-embeddings-nightly
+    env: python
+    schedule: "0 0 * * *"  # Every day at midnight UTC
+    buildCommand: pip install -r requirements.txt
+    startCommand: python make_embeddings.py
