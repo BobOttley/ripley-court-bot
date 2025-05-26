@@ -427,14 +427,16 @@ system_prompt = (
     "Use British spelling."
 )
 
-# ─── Create Flask app & enable CORS ─────────────────
+# ─── Create Flask app & enable CORS (serve static/chat.html) ─────────────────
 app = Flask(__name__, static_folder="static")
-CORS(app)
+CORS(app, resources={r"/ask": {"origins": "*"}})
+
+from flask import redirect
 
 @app.route("/", methods=["GET"])
 def home():
-    # Serve static/index.html directly at root
-    return app.send_static_file("index.html")
+    # Redirect root URL to the static chat page
+    return redirect("/static/chat.html")
 
 
 # ─── Helper functions ────────────────────────────────────────────────────────
