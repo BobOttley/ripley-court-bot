@@ -406,7 +406,7 @@ STATIC_QAS = {
         URL_LABELS[PAGE_LINKS["girl year 3-6"]]
     ),
     "sixth form": (
-        ""We educate pupils from Nursery through Year 6, preparing them academically and pastorally "
+        "We educate pupils from Nursery through Year 6, preparing them academically and pastorally "
         "for the transition to senior schools.",
         PAGE_LINKS["results and destinations"],
         URL_LABELS[PAGE_LINKS["results and destinations"]]
